@@ -35,20 +35,26 @@ bash "install_graphite" do
   #creates "/opt/graphite/bin/carbon-cache.py"
 end
 
+template "/opt/graphite/webapp/graphite/initial_data.json" do
+  source "initial_data.json.erb"
+  action :create
+end
+
 ### Config apache
 bash "config_graphite_apache" do
-  creates "/etc/apache2/sites-available/graphite"
+  #creates "/etc/apache2/sites-available/graphite"
   code <<-EOH
     cp /opt/graphite/examples/example-graphite-vhost.conf /etc/apache2/sites-available/graphite
     mkdir /etc/apache2/run
     a2ensite graphite
+    a2dissite default
     sed -i 's/@DJANGO_ROOT@/\/usr\/lib\/pymodules\/python2.6\/django/' /etc/apache2/sites-available/graphite
     sed -i 's/run\/wsgi/\/var\/run\/apache2\/wsgi/g' /etc/apache2/sites-available/graphite.conf
     cp /opt/graphite/conf/graphite.wsgi.example /opt/graphite/conf/graphite.wsgi
     cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf
     cp /opt/graphite/conf/storage-schemas.conf.example /opt/graphite/conf/storage-schemas.conf
     cd /opt/graphite/webapp/graphite
-    #python manage.py syncdb
+    python manage.py syncdb --noinput
     chown www-data:www-data /opt/graphite/storage
     chown www-data:www-data /opt/graphite/storage/graphite.db
     chown -R www-data:www-data /opt/graphite/storage/log/webapp/
@@ -56,7 +62,7 @@ bash "config_graphite_apache" do
     sed -i "s/#MEMCACHE_HOSTS.*/MEMCACHE_HOSTS = ['127.0.0.1:11211']/" /opt/graphite/webapp/graphite/local_settings.py
 #   touch /opt/graphite/storage/index
 #
-
+    /etc/init.d/apache2 restart
   EOH
 end
 
