@@ -1,7 +1,7 @@
 Description
 ===========
 
-Install Graphite
+Install Graphite 0.9.10
 
 Requirements
 ============
