@@ -15,3 +15,6 @@ default[:graphite][:dependencies] = ["python", "python-twisted", "apache2", "pyt
 default["graphite"]["email"] = "bob@mysite.com"
 default["graphite"]["web_user"] = "root"
 default["graphite"]["passwd_hash"] = nil
+
+# Carbon relay defaults
+default["graphite"]["relay"]["destinations"] = ["127.0.0.1:2004"]
