@@ -11,3 +11,7 @@ default["whisper"]["dependencies"] =  ["python"]
 default[:carbon][:dependencies] = ["python", "python-twisted"]
 default[:graphite][:dependencies] = ["python", "python-twisted", "apache2", "python-cairo", "python-django", "python-django-tagging", "python-zope.interface", "libapache2-mod-python", "python-memcache", "memcached", "libapache2-mod-wsgi"]
 
+#web app settings
+default["graphite"]["email"] = "bob@mysite.com"
+default["graphite"]["web_user"] = "root"
+default["graphite"]["passwd_hash"] = nil
